@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>شحن الذهب - Blood Strike</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f0f0f, #1c1c1c);
+      color: #fff;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background-color: #222;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+      text-align: center;
+    }
+
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #ffd700;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #ccc;
+      margin-bottom: 25px;
+    }
+
+    input, select {
+      width: 90%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      text-align: right;
+    }
+
+    input[type="submit"] {
+      background-color: #ffd700;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #e6c200;
+    }
+
+    .gold-options {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .gold-card {
+      background-color: #333;
+      border: 2px solid #ffd700;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 10px;
+      width: 45%;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .gold-card:hover {
+      transform: scale(1.05);
+      background-color: #444;
+    }
+
+    .selected {
+      background-color: #ffd700 !important;
+      color: #000;
+    }
+
+    #loading {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #loading span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 3px;
+      background-color: #ffd700;
+      border-radius: 50%;
+      animation: bounce 0.6s infinite alternate;
+    }
+
+    #loading span:nth-child(2) { animation-delay: 0.2s; }
+    #loading span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      to { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Blood_Strike_Logo.png/600px-Blood_Strike_Logo.png" alt="Blood Strike Logo" class="logo">
+    <h1>شحن الذهب</h1>
+    <p>أدخل البيانات واختر كمية الذهب التي تريد شحنها</p>
+
+    <form onsubmit="handleSubmit(event)">
+      <input type="text" id="userId" placeholder="معرف الحساب (ID)" required>
+      <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+
+      <div class="gold-options" id="goldOptions">
+        <div class="gold-card" data-value="100">100 Gold</div>
+        <div class="gold-card" data-value="300">300 Gold</div>
+        <div class="gold-card" data-value="500">500 Gold</div>
+        <div class="gold-card" data-value="1000">1000 Gold</div>
+      </div>
+
+      <input type="hidden" id="selectedGold" required>
+      <input type="submit" value="شحن الآن">
+    </form>
+
+    <div id="loading">
+      <span></span><span></span><span></span>
+      <p style="margin-top: 10px;">جاري الشحن...</p>
+    </div>
+  </div>
+
+  <script>
+    const goldCards = document.querySelectorAll('.gold-card');
+    const selectedGoldInput = document.getElementById('selectedGold');
+
+    goldCards.forEach(card => {
+      card.addEventListener('click', () => {
+        goldCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedGoldInput.value = card.getAttribute('data-value');
+      });
+    });
+
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      const userId = document.getElementById('userId').value;
+      const email = document.getElementById('email').value;
+      const goldAmount = selectedGoldInput.value;
+
+      if (!goldAmount) {
+        alert('يرجى اختيار كمية الذهب.');
+        return;
+      }
+
+      document.querySelector('form').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+
+      setTimeout(() => {
+        alert(`تم شحن ${goldAmount} Gold إلى الحساب: ${userId}`);
+        window.location.href = "http://localhost:9090";
+      }, 3000); // 3 ثوانٍ وهمية للشحن
+    }
+  </script>
+
+</body>
+</html>
